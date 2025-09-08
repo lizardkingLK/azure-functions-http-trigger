@@ -1,24 +1,36 @@
+using AzureFunctionSample.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.Functions.Worker;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Primitives;
 
-namespace AzureFunctionSample.SampleHttpTrigger
+namespace AzureFunctionSample;
+
+public class SampleHttpTrigger(ILogger<SampleHttpTrigger> logger, SampleService customService)
 {
-    public class SampleHttpTrigger
+    private readonly ILogger<SampleHttpTrigger> _logger = logger;
+
+    private readonly SampleService _customService = customService;
+
+    [Function("SampleHttpTrigger")]
+    public IActionResult Run([HttpTrigger(AuthorizationLevel.Anonymous,
+    "get",
+    "post")] HttpRequest req)
     {
-        private readonly ILogger<SampleHttpTrigger> _logger;
+        _logger.LogInformation("SampleHttp trigger");
 
-        public SampleHttpTrigger(ILogger<SampleHttpTrigger> logger)
-        {
-            _logger = logger;
-        }
-
-        [Function("SampleHttpTrigger")]
-        public IActionResult Run([HttpTrigger(AuthorizationLevel.Anonymous, "get", "post")] HttpRequest req)
-        {
-            _logger.LogInformation("C# HTTP trigger function processed a request.");
-            return new OkObjectResult("Welcome to Azure Functions!");
-        }
+        return new OkObjectResult(
+            string.Format("""
+            Hello {0}!
+            Your sample configuration options are below:
+            {1}
+            """,
+                req.Query.TryGetValue(
+                    "name",
+                    out StringValues value)
+                    ? value
+                    : "Annonymous",
+                    _customService.ConcatOptions()));
     }
 }
