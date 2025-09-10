@@ -5,6 +5,8 @@ using Microsoft.Azure.Functions.Worker;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Primitives;
 
+using static AzureFunctionSample.Shared.SampleErrorResult;
+
 namespace AzureFunctionSample;
 
 public class SampleHttpTrigger(ILogger<SampleHttpTrigger> logger, SampleService customService)
@@ -20,17 +22,24 @@ public class SampleHttpTrigger(ILogger<SampleHttpTrigger> logger, SampleService 
     {
         _logger.LogInformation("SampleHttp trigger");
 
-        return new OkObjectResult(
-            string.Format("""
-            Hello {0}!
-            Your sample configuration options are below:
-            {1}
-            """,
-                req.Query.TryGetValue(
-                    "name",
-                    out StringValues value)
-                    ? value
-                    : "Annonymous",
-                    _customService.ConcatOptions()));
+        try
+        {
+            string name = req.Query.TryGetValue("name", out StringValues value)
+            ? value.ToString()
+            : "Anonymous";
+
+            string optionsString = _customService.ConcatOptions();
+
+            string response = string.Format(
+                "Hello {0}!\nYourSample Configuration Options Are Below:\n{1}",
+                "Anonymous",
+                optionsString);
+
+            return new OkObjectResult(response);
+        }
+        catch (Exception ex)
+        {
+            return GetError(ex.Message);
+        }
     }
 }
