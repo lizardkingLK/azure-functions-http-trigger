@@ -264,7 +264,8 @@ __pycache__/
 *.pyc
 
 # azurite config files
-__azurite_*.json__
+__azurite_*__.json
 
 # azurite local files
 __*storage__
+
