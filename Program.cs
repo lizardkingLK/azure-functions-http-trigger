@@ -19,7 +19,10 @@ internal class Program
         })
         .ConfigureServices((context, services) =>
         {
-            services.Configure<SampleOptions>(context.Configuration.GetSection(nameof(SampleOptions)));
+            services.AddOptions<SampleOptions>()
+                .Bind(context.Configuration.GetSection(nameof(SampleOptions)))
+                .ValidateDataAnnotations()
+                .ValidateOnStart();
 
             services.AddHttpClient<SampleService>((serviceProvider, httpClient) =>
             {
