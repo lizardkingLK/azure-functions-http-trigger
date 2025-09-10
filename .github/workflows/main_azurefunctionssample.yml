@@ -36,10 +36,6 @@ jobs:
           dotnet build --configuration Release --output ./output
           popd
       
-      - name: Create local.settings.json before start
-        run: |
-          echo "$LOCAL_SETTINGS" > local.settings.json
-      
       - name: Login to Azure
         uses: azure/login@v2
         with:
