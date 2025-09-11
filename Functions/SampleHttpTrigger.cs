@@ -7,7 +7,7 @@ using Microsoft.Extensions.Primitives;
 
 using static AzureFunctionSample.Shared.SampleErrorResult;
 
-namespace AzureFunctionSample;
+namespace AzureFunctionSample.Functions;
 
 public class SampleHttpTrigger(ILogger<SampleHttpTrigger> logger, SampleService customService)
 {

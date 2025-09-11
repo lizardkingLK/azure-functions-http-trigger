@@ -1,7 +1,5 @@
 using AzureFunctionSample.Configurations.Options;
 using AzureFunctionSample.Services;
-using Microsoft.AspNetCore.Builder;
-using Microsoft.Azure.Functions.Worker.Builder;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -29,6 +27,8 @@ internal class Program
                 SampleOptions options = serviceProvider.GetRequiredService<IOptions<SampleOptions>>().Value;
                 httpClient.BaseAddress = new Uri(options.BaseAPIAddress);
             });
+
+            services.AddSingleton<TokenService>();
         })
         .Build();
 
