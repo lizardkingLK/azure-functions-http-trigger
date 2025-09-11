@@ -20,7 +20,7 @@ public class SampleService(
 
     private readonly IOptions<SampleOptions> _options = options;
 
-    pgit ublic string ConcatOptions()
+    public string ConcatOptions()
     {
         (TokenState? token, int cycle) = _tokenService.GetToken();
         if (token == null)
