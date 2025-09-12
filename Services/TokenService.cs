@@ -16,7 +16,7 @@ public class TokenService(ILogger<TokenService> logger)
 
     private const int TokenSize = 256;
 
-    private readonly ConcurrentBag<TokenState> _tokens = [];
+    private readonly ConcurrentBag<TokenState?> _tokens = [];
 
     private int cycle = 0;
 
@@ -29,12 +29,7 @@ public class TokenService(ILogger<TokenService> logger)
             return (null, cycle);
         }
 
-        TokenState? token = null;
-        // object lockObject = new();
-        // lock (lockObject)
-        // {
-            token = _tokens.ElementAt(Random.Shared.Next(Size));
-        // }
+        TokenState? token = _tokens.ElementAt(Random.Shared.Next(Size));
 
         return (token, cycle);
     }
@@ -42,6 +37,8 @@ public class TokenService(ILogger<TokenService> logger)
     public void SetTokens()
     {
         _logger.LogInformation(nameof(SetTokens));
+
+        _tokens.Clear();
 
         for (int i = 0; i < Size; i++)
         {
@@ -51,7 +48,7 @@ public class TokenService(ILogger<TokenService> logger)
         cycle++;
     }
 
-    private TokenState CreateAccessToken()
+    public TokenState CreateAccessToken()
     => new(string.Join(null, Enumerable
         .Range(0, TokenSize)
         .Select(item => alphabet[Random.Shared.Next(Size)])), DateTime.Now.AddHours(1));
