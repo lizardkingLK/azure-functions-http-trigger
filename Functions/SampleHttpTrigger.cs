@@ -32,7 +32,7 @@ public class SampleHttpTrigger(ILogger<SampleHttpTrigger> logger, SampleService 
 
             string response = string.Format(
                 "Hello {0}!\nYourSample Configuration Options Are Below:\n{1}",
-                "Anonymous",
+                name,
                 optionsString);
 
             return new OkObjectResult(response);

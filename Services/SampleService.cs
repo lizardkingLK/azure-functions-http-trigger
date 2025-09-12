@@ -25,7 +25,8 @@ public class SampleService(
         (TokenState? token, int cycle) = _tokenService.GetToken();
         if (token == null)
         {
-            _logger.LogWarning("tokens have not been set yet");
+            _logger.LogWarning("WARNING. tokens are in null/empty/pending state");
+            token = _tokenService.CreateAccessToken();
         }
 
         return JsonSerializer.Serialize(new
