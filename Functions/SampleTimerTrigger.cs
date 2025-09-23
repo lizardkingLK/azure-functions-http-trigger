@@ -13,7 +13,7 @@ public class SampleTimerTrigger(ILogger<SampleTimerTrigger> logger, TokenService
 
     [Function(nameof(SampleTimerTrigger))]
     public IActionResult Run(
-        [TimerTrigger("0 */1 * * * *")] TimerInfo timerInfo, FunctionContext context)
+        [TimerTrigger("0 */10 * * * *")] TimerInfo timerInfo, FunctionContext context)
     {
         _logger.LogInformation(
             "\tFunction Ran. Next timer schedule = {next}",
