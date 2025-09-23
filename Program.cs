@@ -28,8 +28,6 @@ internal class Program
                 httpClient.BaseAddress = new Uri(options.BaseAPIAddress);
             });
 
-            services.AddAuthorization();
-
             services.AddSingleton<TokenService>();
         })
         .Build();
